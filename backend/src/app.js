@@ -36,6 +36,14 @@ app.get('/', (req, res) => {
   res.json({ message: 'Welcome to Pet Accessories API' });
 });
 
+// Add health check endpoint
+app.get('/api/health', (req, res) => {
+  res.json({
+    status: 'healthy',
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime()
+  });
+
 // Error handling middleware (should be last)
 app.use(errorHandler);
 

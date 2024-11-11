@@ -10,7 +10,7 @@
         "test": "npx jest --config jest.config.cjs",
         "test:coverage": "node --experimental-vm-modules node_modules/.bin/jest --config jest.config.cjs --coverage",
         "test:watch": "node --experimental-vm-modules node_modules/.bin/jest --config jest.config.cjs --watch",
-        "build": "vite build"
+        "build": "echo 'No build step required for backend'"
     },
     "dependencies": {
         "bcryptjs": "^2.4.3",

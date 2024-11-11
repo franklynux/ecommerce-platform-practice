@@ -1,12 +1,16 @@
-# backend/Dockerfile
 FROM node:18-alpine
 
-WORKDIR /app
+WORKDIR /usr/src/app
 
+# Copy both package.json AND package-lock.json
 COPY package*.json ./
+
+# Install dependencies
 RUN npm ci
 
+# Copy the rest of the application code
 COPY . .
 
 EXPOSE 5000
+
 CMD ["npm", "start"]
