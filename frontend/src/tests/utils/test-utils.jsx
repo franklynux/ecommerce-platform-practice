@@ -3,16 +3,18 @@ import { render } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import { CartProvider } from '../../contexts/CartContext';
 
-export function renderWithProviders(ui, options = {}) {
-  const AllProviders = ({ children }) => {
+export function renderWithProviders(ui, { initialCartItems = [], ...options } = {}) {
+  const Wrapper = ({ children }) => {
     return (
       <BrowserRouter>
-        <CartProvider>
+        <CartProvider initialItems={initialCartItems}>
           {children}
         </CartProvider>
       </BrowserRouter>
     );
   };
 
-  return render(ui, { wrapper: AllProviders, ...options });
+  return {
+    ...render(ui, { wrapper: Wrapper, ...options }),
+  };
 }

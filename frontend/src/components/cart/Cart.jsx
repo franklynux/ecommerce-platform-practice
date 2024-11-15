@@ -58,10 +58,9 @@ const Cart = () => {
                   </select>
                   
                   <button
-                    onClick={() => removeItem(item.id)}
-                    className="text-red-500 hover:text-red-700"
+                    onClick={() => removeItem(item.product._id)}
                     aria-label="Remove item"
-                  >
+                    >
                     <TrashIcon className="h-5 w-5" />
                   </button>
                 </div>
