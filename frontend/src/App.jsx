@@ -1,19 +1,21 @@
 // src/App.jsx
 import React, { useEffect } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import { CartProvider } from './contexts/CartContext';
-import { ProtectedContent, GuestContent } from './contexts/AuthContext';
+import { AuthProvider, ProtectedContent, GuestContent } from './contexts/AuthContext';
 import Layout from './components/layout/Layout';
+import { Toaster } from 'react-hot-toast';
+
+// Pages and Components
 import Home from './pages/Home';
 import ProductList from './components/products/ProductList';
 import ProductDetails from './components/products/ProductDetails';
-import Checkout from './components/checkout/Checkout';
 import Cart from './components/cart/Cart';
+import Checkout from './components/checkout/Checkout';
 import { Login, Register } from './components/auth';
-import { Navigate } from 'react-router-dom';
-import { Toaster } from 'react-hot-toast';  
 
 const App = () => {
+  // Remove loader on mount
   useEffect(() => {
     const loader = document.getElementById('loader');
     if (loader) {
@@ -23,7 +25,7 @@ const App = () => {
   }, []);
 
   return (
-    <>
+    <AuthProvider>
       <CartProvider>
         <Layout>
           <Routes>
@@ -53,31 +55,31 @@ const App = () => {
             } />
           </Routes>
         </Layout>
+
+        {/* Toast notifications */}
+        <Toaster 
+          position="bottom-right"
+          toastOptions={{
+            style: {
+              background: '#333',
+              color: '#fff',
+            },
+            success: {
+              duration: 3000,
+              style: {
+                background: '#4F46E5',
+              },
+            },
+            error: {
+              duration: 3000,
+              style: {
+                background: '#EF4444',
+              },
+            },
+          }}
+        />
       </CartProvider>
-      
-      {/* Add Toaster outside of CartProvider but inside the fragment */}
-      <Toaster 
-        position="bottom-right"
-        toastOptions={{
-          style: {
-            background: '#333',
-            color: '#fff',
-          },
-          success: {
-            duration: 3000,
-            style: {
-              background: '#4F46E5',
-            },
-          },
-          error: {
-            duration: 3000,
-            style: {
-              background: '#EF4444',
-            },
-          },
-        }}
-      />
-    </>
+    </AuthProvider>
   );
 };
 
