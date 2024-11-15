@@ -1,5 +1,7 @@
 import React from 'react';
-import { useCart } from '../../contexts/CartContext';
+import { useCart } from '../../hooks/useCart';  // Updated import path
+import { Link } from 'react-router-dom';
+import { formatCurrency } from '../../utils/formatCurrency';
 
 const featuredProducts = [
   {
