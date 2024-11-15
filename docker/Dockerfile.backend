@@ -1,0 +1,23 @@
+FROM node:18-alpine
+
+WORKDIR /app
+
+# Add package files
+COPY package*.json ./
+COPY backend/package*.json ./backend/
+
+# Install dependencies with network retry and clean npm cache
+RUN apk add --no-cache git && \
+    npm config set fetch-retry-mintimeout 20000 && \
+    npm config set fetch-retry-maxtimeout 120000 && \
+    npm install --no-audit && \
+    npm cache clean --force
+
+
+# Copy backend source
+COPY backend ./backend
+
+WORKDIR /app/backend
+
+EXPOSE 5000
+CMD ["npm", "start"]

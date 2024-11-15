@@ -11,9 +11,6 @@ services:
       - MONGODB_URI=mongodb+srv://franklynux:admin123@testcluster.40akg.mongodb.net/pet-accessories
       - NODE_ENV=development
       - PORT=5000
-    dns:
-      - 8.8.8.8
-      - 8.8.4.4
     depends_on:
       - mongo
     volumes:
@@ -29,9 +26,6 @@ services:
       dockerfile: docker/Dockerfile.frontend
     ports:
       - "3000:80"
-    dns:
-      - 8.8.8.8
-      - 8.8.4.4
     depends_on:
       - backend
     volumes:
@@ -42,12 +36,9 @@ services:
 
   mongo:
     container_name: pet-accessories-mongo
-    image: mongo:latest
+    image: mongo
     ports:
       - "27017:27017"
-    dns:
-      - 8.8.8.8
-      - 8.8.4.4
     volumes:
       - mongo-data:/data/db
     networks:

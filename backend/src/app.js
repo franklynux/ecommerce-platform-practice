@@ -1,4 +1,3 @@
-// backend/src/app.js
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
@@ -11,21 +10,17 @@ import configureSecurityMiddleware from './middleware/security.js';
 
 const app = express();
 
-// Basic middleware
-app.use(helmet());
-app.use(cors());
+// Apply basic middleware
+app.use(express.json({ limit: '10kb' }));
+app.use(express.urlencoded({ extended: true, limit: '10kb' }));
 app.use(morgan('dev'));
 
-// Security middleware
+// Apply security middleware
 configureSecurityMiddleware(app);
 
 // Rate limiting
 app.use('/api/', apiLimiter);
 app.use('/api/auth/', authLimiter);
-
-// Body parsers
-app.use(express.json({ limit: '10kb' }));
-app.use(express.urlencoded({ extended: true, limit: '10kb' }));
 
 // Routes
 app.use('/api/products', productRoutes);
@@ -36,13 +31,15 @@ app.get('/', (req, res) => {
   res.json({ message: 'Welcome to Pet Accessories API' });
 });
 
-// Add health check endpoint
+// Health check endpoint
 app.get('/api/health', (req, res) => {
   res.json({
     status: 'healthy',
+    message: 'Server is running',
     timestamp: new Date().toISOString(),
     uptime: process.uptime()
   });
+});
 
 // Error handling middleware (should be last)
 app.use(errorHandler);

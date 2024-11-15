@@ -1,7 +1,10 @@
-// backend/src/index.js
 import app from './app.js';
 import config from './config/environment.js';
 import connectDB from './config/database.js';
+import dotenv from 'dotenv';
+
+// Load environment variables
+dotenv.config();
 
 const start = async () => {
   try {
@@ -9,8 +12,9 @@ const start = async () => {
     await connectDB();
     
     // Start server
-    app.listen(config.port, () => {
-      console.log(`Server running on port ${config.port}`);
+    const port = config.port || 5000;
+    app.listen(port, () => {
+      console.log(`Server running on port ${port}`);
     });
   } catch (error) {
     console.error('Failed to start server:', error);
@@ -18,4 +22,7 @@ const start = async () => {
   }
 };
 
-start();
+start().catch((error) => {
+  console.error('Unhandled promise rejection:', error);
+  process.exit(1);
+});

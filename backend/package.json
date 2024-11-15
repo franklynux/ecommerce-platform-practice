@@ -1,5 +1,5 @@
 {
-    "name": "pet-accessories-backend",
+    "name": "@pet-accessories/backend",
     "version": "1.0.0",
     "description": "Backend for pet accessories e-commerce platform",
     "main": "src/index.js",
@@ -40,5 +40,8 @@
         "mongodb-memory-server": "^9.1.1",
         "nodemon": "^2.0.22",
         "supertest": "^6.3.3"
-    }
+    },
+    "engines": {
+      "node": ">=18.0.0"
+  }
 }
