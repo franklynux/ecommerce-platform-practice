@@ -29,6 +29,10 @@ jobs:
       - name: Install Dependencies
         working-directory: frontend
         run: npm ci
+
+      - name: Verify Installed Dependencies
+        working-directory: frontend
+        run: npm list  
         
       - name: Run Tests
         working-directory: frontend
