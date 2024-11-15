@@ -1,13 +1,26 @@
 import '@testing-library/jest-dom';
-import { vi } from 'vitest';
+import { beforeAll, afterEach, afterAll } from 'vitest';
 import { cleanup } from '@testing-library/react';
+
+beforeAll(() => {
+  // Global test setup
+});
 
 afterEach(() => {
   cleanup();
 });
 
-global.ResizeObserver = vi.fn().mockImplementation(() => ({
-  observe: vi.fn(),
-  unobserve: vi.fn(),
-  disconnect: vi.fn(),
-}));
+afterAll(() => {
+  // Global test cleanup
+});
+
+// Mock window.matchMedia
+beforeAll(() => {
+  window.matchMedia = window.matchMedia || function() {
+    return {
+      matches: false,
+      addListener: function() {},
+      removeListener: function() {}
+    };
+  };
+});

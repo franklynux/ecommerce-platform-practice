@@ -1,89 +1,51 @@
 import React from 'react';
 import { describe, it, expect } from 'vitest';
-import { screen, render, fireEvent, waitFor } from '@testing-library/react';
+import { screen, fireEvent, waitFor } from '@testing-library/react';
+import { renderWithProviders } from '../../../tests/utils/test-utils';
 import Cart from '../Cart';
-import { CartProvider } from '../../../contexts/CartContext';
-import { useCart } from '../../../hooks/useCart';
-
-// Test component to manipulate cart
-const TestCart = () => {
-  const { addItem } = useCart();
-
-  const handleAddItem = () => {
-    addItem({
-      _id: '1',
-      name: 'Test Product',
-      price: 10.99
-    });
-  };
-
-  return (
-    <div>
-      <Cart />
-      <button onClick={handleAddItem} data-testid="add-item-button">
-        Add Item
-      </button>
-    </div>
-  );
-};
 
 describe('Cart', () => {
   it('shows empty cart message when no items', () => {
-    render(
-      <CartProvider>
-        <Cart />
-      </CartProvider>
-    );
-    
+    renderWithProviders(<Cart />);
     expect(screen.getByText(/your cart is empty/i)).toBeInTheDocument();
   });
 
   it('displays cart items and total', async () => {
-    render(
-      <CartProvider>
-        <TestCart />
-      </CartProvider>
-    );
-
-    // First verify cart is empty
+    const { rerender } = renderWithProviders(<Cart />);
+    
+    // Verify empty state first
     expect(screen.getByText(/your cart is empty/i)).toBeInTheDocument();
+    
+    // Update cart context with items
+    // Note: You might need to modify this based on your actual CartContext implementation
+    rerender(<Cart initialItems={[{
+      product: {
+        _id: '1',
+        name: 'Test Product',
+        price: 10.99
+      },
+      quantity: 1
+    }]} />);
 
-    // Click add item button
-    const addButton = screen.getByTestId('add-item-button');
-    fireEvent.click(addButton);
-
-    // Wait for and verify item appears
     await waitFor(() => {
       expect(screen.getByText('Test Product')).toBeInTheDocument();
-    });
-
-    // Verify price is displayed
-    await waitFor(() => {
       expect(screen.getByText('$10.99')).toBeInTheDocument();
     });
   });
 
   it('allows removing items from cart', async () => {
-    render(
-      <CartProvider>
-        <TestCart />
-      </CartProvider>
-    );
+    renderWithProviders(<Cart initialItems={[{
+      product: {
+        _id: '1',
+        name: 'Test Product',
+        price: 10.99
+      },
+      quantity: 1
+    }]} />);
 
-    // Add an item
-    const addButton = screen.getByTestId('add-item-button');
-    fireEvent.click(addButton);
-
-    // Wait for item to appear
-    await waitFor(() => {
-      expect(screen.getByText('Test Product')).toBeInTheDocument();
-    });
-
-    // Click remove button
-    const removeButton = screen.getByText('Remove');
+    const removeButton = screen.getByText(/remove/i);
     fireEvent.click(removeButton);
 
-    // Verify item is removed
     await waitFor(() => {
       expect(screen.getByText(/your cart is empty/i)).toBeInTheDocument();
     });

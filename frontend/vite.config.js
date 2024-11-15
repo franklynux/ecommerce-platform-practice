@@ -1,6 +1,5 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-import path from 'path';
 
 export default defineConfig({
   plugins: [react()],
@@ -8,19 +7,22 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom',
     setupFiles: ['./src/tests/setup.js'],
-    include: ['src/**/*.{test,spec}.{js,jsx}'],
-    exclude: ['node_modules', 'dist'],
+    css: true,
+    deps: {
+      inline: ['vitest-canvas-mock']
+    },
     coverage: {
       reporter: ['text', 'json', 'html'],
-      exclude: ['node_modules/', 'src/tests/']
-    }
+      exclude: [
+        'node_modules/',
+        'src/tests/',
+      ]
+    },
+    include: ['src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
   },
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src')
+      '@': '/src'
     }
-  },
-  server: {
-    port: 3000 // This sets the server to run on port 3000
   }
 });
