@@ -1,6 +1,6 @@
 // src/components/products/ProductList.jsx
 import React, { useState } from 'react';
-import { useCart } from '../../contexts/CartContext';
+import { useCart } from '../../hooks/useCart';
 import { ShoppingCartIcon } from '@heroicons/react/24/outline';
 import { CheckIcon } from '@heroicons/react/24/solid';
 
