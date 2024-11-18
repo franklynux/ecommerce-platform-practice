@@ -23,6 +23,36 @@ app.use('/api/', apiLimiter);
 app.use('/api/auth/', authLimiter);
 
 // Routes
+
+// Health Check Endpoint
+app.get('/api/health', async (req, res) => {
+  try {
+      const dbState = mongoose.connection.readyState;
+      const dbStatus = {
+          0: 'disconnected',
+          1: 'connected',
+          2: 'connecting',
+          3: 'disconnecting'
+      };
+
+      res.status(200).json({
+          status: 'healthy',
+          timestamp: new Date().toISOString(),
+          service: 'backend',
+          database: {
+              status: dbStatus[dbState],
+              healthy: dbState === 1
+          }
+      });
+  } catch (error) {
+      res.status(500).json({
+          status: 'unhealthy',
+          timestamp: new Date().toISOString(),
+          error: error.message
+      });
+  }
+});
+
 app.use('/api/products', productRoutes);
 app.use('/api/orders', orderRoutes);
 
@@ -31,6 +61,7 @@ app.get('/', (req, res) => {
   res.json({ message: 'Welcome to Pet Accessories API' });
 });
 
+/*
 // Health check endpoint
 app.get('/api/health', (req, res) => {
   res.json({
@@ -40,6 +71,7 @@ app.get('/api/health', (req, res) => {
     uptime: process.uptime()
   });
 });
+*/
 
 // Error handling middleware (should be last)
 app.use(errorHandler);
