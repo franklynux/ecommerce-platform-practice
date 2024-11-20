@@ -21,12 +21,6 @@ services:
       - node_modules_backend:/app/backend/node_modules
     networks:
       - app_network
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:5000/api/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 40s
 
   frontend:
     container_name: pet-accessories-frontend
@@ -39,25 +33,15 @@ services:
       - 8.8.8.8
       - 8.8.4.4
     depends_on:
-      backend:
-        condition: service_healthy
+      - backend
     volumes:
-      - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./docker/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./frontend:/app/frontend
       - node_modules_frontend:/app/frontend/node_modules
-      - nginx_temp:/tmp/nginx
-      - nginx_cache:/var/cache/nginx
     tmpfs:
       - /tmp
     networks:
       - app_network
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:80/health.txt"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 40s
 
   mongo:
     container_name: pet-accessories-mongo
@@ -71,12 +55,6 @@ services:
       - mongo-data:/data/db
     networks:
       - app_network
-    healthcheck:
-      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 40s
 
 networks:
   app_network:
@@ -86,5 +64,3 @@ volumes:
   node_modules_backend:
   node_modules_frontend:
   mongo-data:
-  nginx_temp:
-  nginx_cache:
