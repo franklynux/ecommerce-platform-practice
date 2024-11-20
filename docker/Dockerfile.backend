@@ -1,36 +1,32 @@
+# docker/Dockerfile.backend
 FROM node:18-alpine
 
 WORKDIR /app
 
-# Install necessary utilities and dependencies
-RUN apk add --no-cache git wget curl && \
-    npm config set fetch-retry-mintimeout 20000 && \
-    npm config set fetch-retry-maxtimeout 120000
-
-# Add package files
+# Copy package files
 COPY package*.json ./
 COPY backend/package*.json ./backend/
 
-# Install dependencies with network retry and clean npm cache
-RUN npm install --no-audit && \
-    npm cache clean --force
+# Install dependencies
+RUN npm ci
 
 # Copy backend source
 COPY backend ./backend
 
 WORKDIR /app/backend
 
-# Create a startup script for proper initialization
-RUN echo '#!/bin/sh' > /start.sh && \
-    echo 'echo "Starting backend service..."' >> /start.sh && \
-    echo 'npm start' >> /start.sh && \
-    chmod +x /start.sh
-
-# Add health check
-HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
+# Add healthcheck
+HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
     CMD wget --no-verbose --tries=1 --spider http://localhost:5000/api/health || exit 1
+
+# Install wget for healthcheck
+RUN apk add --no-cache wget
+
+# Create non-root user
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+USER appuser
 
 EXPOSE 5000
 
-# Use the startup script
-CMD ["/start.sh"]
+# Use node directly instead of npm to avoid permission issues
+CMD ["node", "src/index.js"]
