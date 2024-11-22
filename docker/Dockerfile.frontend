@@ -29,14 +29,16 @@ RUN mkdir -p /tmp/client_temp \
              /tmp/scgi_temp \
     && chmod 777 /tmp
 
+RUN chown -R nginx:nginx /tmp && \
+chown -R nginx:nginx /var/cache/nginx && \
+chown -R nginx:nginx /var/log/nginx && \
+chown -R nginx:nginx /etc/nginx/conf.d    
+
 # Remove default nginx static files
 RUN rm -rf /usr/share/nginx/html/*
 
 # Copy built assets from builder stage
 COPY --from=build /app/frontend/dist /usr/share/nginx/html
-
-# Copy nginx configuration
-COPY docker/nginx.conf /etc/nginx/nginx.conf
 
 EXPOSE 80
 

@@ -35,14 +35,15 @@ services:
     depends_on:
       - backend
     volumes:
-      - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./docker/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./frontend:/app/frontend
       - ./frontend/static:/var/www/static:ro
       - node_modules_frontend:/app/frontend/node_modules
     tmpfs:
-      - /tmp/nginx
+      - /tmp
     networks:
       - app_network
+    user: nginx  
 
   mongo:
     container_name: pet-accessories-mongo
