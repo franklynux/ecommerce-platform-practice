@@ -13,7 +13,7 @@ FROM nginx:alpine
 RUN apk add --no-cache curl
 
 # Remove default nginx static files
-RUN rm -rf /usr/share/nginx/html/*
+RUN rm -rf /usr/share/nginx/html/* /etc/nginx/conf.d/*
 
 # Create temp directories in /tmp
 RUN mkdir -p /tmp/nginx/client_temp \
