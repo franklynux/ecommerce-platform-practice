@@ -1,7 +1,7 @@
 version: '3'
 services:
   backend:
-    container_name: pet-accessories-backend
+    container_name: backend
     build:
       context: .
       dockerfile: docker/Dockerfile.backend
@@ -20,7 +20,7 @@ services:
       - app_network
 
   frontend:
-    container_name: pet-accessories-frontend
+    container_name: frontend
     build:
       context: .
       dockerfile: docker/Dockerfile.frontend

@@ -1,7 +1,7 @@
 version: '3'
 services:
   backend:
-    container_name: backend
+    container_name: backend 
     build:
       context: .
       dockerfile: docker/Dockerfile.backend
@@ -23,7 +23,7 @@ services:
       - app_network
 
   frontend:
-    container_name: frontend
+    container_name: frontend 
     build:
       context: .
       dockerfile: docker/Dockerfile.frontend
@@ -45,10 +45,10 @@ services:
       - app_network
     environment:
       - BACKEND_URL=http://backend:5000  
-    user: nginx  
+    user: nginx
 
   mongo:
-    container_name: pet-accessories-mongo
+    container_name: mongo 
     image: mongo:latest
     ports:
       - "27017:27017"
