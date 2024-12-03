@@ -47,8 +47,6 @@ RUN echo "OK" > /usr/share/nginx/html/health.txt \
 
 EXPOSE 80
 
-USER nginx
-
 HEALTHCHECK --interval=30s --timeout=5s --start-period=15s --retries=3 \
     CMD curl -f http://localhost:80/health.txt || exit 1
 
