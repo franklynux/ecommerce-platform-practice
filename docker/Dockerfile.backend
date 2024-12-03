@@ -1,4 +1,3 @@
-# docker/Dockerfile.backend
 FROM node:18-alpine
 
 # Add necessary build tools
@@ -6,7 +5,6 @@ RUN apk add --no-cache \
     python3 \
     make \
     g++ \
-    wget \
     curl
 
 WORKDIR /app
@@ -23,23 +21,17 @@ COPY backend/ ./backend/
 
 WORKDIR /app/backend
 
-# Create non-root user
-RUN addgroup -S nodejs && \
-    adduser -S nodejs -G nodejs && \
-    chown -R nodejs:nodejs /app
+# Set correct permissions
+RUN chown -R node:node /app
+USER node
 
 # Environment configuration
 ENV NODE_ENV=production \
     PORT=5000
 
-# Switch to non-root user
-USER nodejs
-
-# Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
-    CMD wget --no-verbose --tries=1 --spider http://localhost:5000/api/health || exit 1
+    CMD curl -f http://localhost:5000/api/health || exit 1
 
 EXPOSE 5000
 
-# Start command
 CMD ["node", "src/index.js"]
