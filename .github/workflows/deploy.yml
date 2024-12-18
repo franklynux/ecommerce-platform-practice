@@ -9,7 +9,7 @@ on:
 env:
   AWS_REGION: us-east-1
   ECR_REPOSITORY_BACKEND: projects/pet-accessories-backend
-  ECR_REPOSITORY_FRONTEND: projects/pet-accessories-frontend  # Fixed typo in repository name
+  ECR_REPOSITORY_FRONTEND: projects/pet-accessories-frontend  
   ECS_SERVICE: ecommerce-webapp
   ECS_CLUSTER: myAppCluster
   AWS_ACCOUNT_ID: '014498645423'
